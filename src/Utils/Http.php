@@ -85,7 +85,7 @@
  *
  */
 
-namespace QKPHP\Utils;
+namespace QKPHP\Common\Utils;
 
 class Http {
 
