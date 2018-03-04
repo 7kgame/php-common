@@ -10,7 +10,7 @@ class Config {
   private static $configDir;
 
   public static function setConfigDir ($configDir) {
-    self::$configDir = $dir;
+    self::$configDir = $configDir;
   }
 
   public static function getAppConf($appName, $key=null) {
