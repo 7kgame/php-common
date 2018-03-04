@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\Config;
+namespace QKPHP\Common\Config;
 
 class Parser {
 

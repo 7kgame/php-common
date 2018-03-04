@@ -29,7 +29,7 @@ class Config {
     return self::getParser()->getValue($appName, $key, $type);
   }
 
-  private static function getParser($name) {
+  private static function getParser() {
     if (empty(self::$parser)) {
       self::$parser = new Parser(self::$configDir); 
     }
