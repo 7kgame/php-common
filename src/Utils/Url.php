@@ -83,9 +83,9 @@ class Url {
         return isset($_REQUEST[$paramName]);
     }
 
-    private static function parseArrayValue($value, $parseNumeric=false) {
+    public static function processRequestValue($value, $isNum=false) {
         if(!is_array($value)) {
-            if(!$parseNumeric) {
+            if(!$isNum) {
                 return trim(htmlentities($value, ENT_QUOTES|ENT_IGNORE, 'UTF-8'));
             } else {
                 return trim($value) - 0;
@@ -93,7 +93,7 @@ class Url {
         } else {
             $ret = array();
             foreach($value as $k=>$v) {
-                $ret[$k] = self::parseArrayValue($v, $parseNumeric);
+                $ret[$k] = self::processRequestValue($v, $isNum);
             }
             return $ret;
         }
@@ -101,7 +101,7 @@ class Url {
 
     public static function getIntParam($paramName, $defaultValue = 0) {
         if(isset($_REQUEST[$paramName])) {
-            return self::parseArrayValue($_REQUEST[$paramName], true);
+            return self::processRequestValue($_REQUEST[$paramName], true);
         } else {
             return $defaultValue;
         }
@@ -109,7 +109,7 @@ class Url {
 
     public static function getStringParam($paramName, $defaultValue = "") {
         if(isset($_REQUEST[$paramName])) {
-            return self::parseArrayValue($_REQUEST[$paramName]);
+            return self::processRequestValue($_REQUEST[$paramName]);
         } else {
             return $defaultValue;
         }
@@ -119,32 +119,13 @@ class Url {
         if(!isset($_REQUEST[$paramName])) {
             return null;
         } else {
-            $values = self::parseArrayValue($_REQUEST[$paramName]);
+            $values = self::processRequestValue($_REQUEST[$paramName]);
             if($index == -1 || $index>=count($values)) {
                 return $values;
             } else {
                 return $values[$index];
             }
         }
-    }
-
-    public static function getPage() {
-        $page = self::getIntParam("page");
-        if($page < 1) {
-            $page = 1;
-        }
-        return $page;
-    }
-
-    public static function getPageSize() {
-        $pageSize = self::getIntParam("pagesize");
-        if($pageSize < 1) {
-            $pageSize = self::getIntParam("pageSize");
-        }
-        if($pageSize < 1) {
-            $pageSize = 20;
-        }
-        return $pageSize;
     }
 
     public static function redirect($location, $status=303) {
@@ -158,13 +139,31 @@ class Url {
             header(self::$httpStatusHeader[$status]);
         }
     }
-    //获取user-agent ua
-    public static function getUserAgent(){
+
+    public static function getUserAgent() {
         return $_SERVER['HTTP_USER_AGENT'];
     }
-    //获取ip
-    public static function getClientIp(){
-        return $_SERVER["REMOTE_ADDR"];
+
+    public static function getClientIp() {
+      $ip = false;
+      if(isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+      }
+      if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ips = explode (',',  $_SERVER['HTTP_X_FORWARDED_FOR']);
+        if ($ip) {
+          array_unshift($ips, $ip);
+          $ip = false;
+        }
+        for ($i=0; $i < count($ips); $i++) {
+          $ips[$i] = trim($ips[$i]);
+          if(!preg_match('/^(10)|(172\.16)|(192\.168)\./', $ips[$i])) {
+            $ip = $ips[$i];
+            break;
+          }
+        }
+      }
+      return ($ip ? $ip : $_SERVER['REMOTE_ADDR']);
     }
 
 }

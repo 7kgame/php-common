@@ -11,7 +11,13 @@ class Annotation {
 
     $methods = $cref->getMethods();
     foreach($methods as $method) {
-      $classInfo['methods'][$method->getName()] = self::parseComment($method->getDocComment());
+      $classInfo['methods'][$method->getName()]['anno'] = self::parseComment($method->getDocComment());
+      $params = $method->getParameters();
+      $paramsName = array();
+      foreach($params as $param) {
+        $paramsName[] = $param->getName();
+      }
+      $classInfo['methods'][$method->getName()]['params'] = array($paramsName, count($paramsName));
     }
     return $classInfo;
   }
