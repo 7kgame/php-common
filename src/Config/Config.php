@@ -13,20 +13,20 @@ class Config {
     self::$configDir = $dir;
   }
 
-  public static function getAppConf($appName, $key) {
-    return self::getParser()->getValue('app', $appName, $key);
+  public static function getAppConf($appName, $key=null) {
+    return self::getParser()->getValue($appName, $key, 'app');
   }
 
   public static function getDBConf($appName, $key="mysql") {
-    return self::getParser()->getValue('db', $appName, $key);
+    return self::getParser()->getValue($appName, $key, 'db');
   }
 
-  public static function getServiceConf($appName, $key) {
-    return self::getParser()->getValue('service', $appName, $key);
+  public static function getServiceConf($appName, $key=null) {
+    return self::getParser()->getValue($appName, $key, 'service');
   }
 
-  public static function getConf($type, $appName, $key) {
-    return self::getParser()->getValue($type, $appName, $key);
+  public static function getConf($appName, $key=null, $type=null) {
+    return self::getParser()->getValue($appName, $key, $type);
   }
 
   private static function getParser($name) {

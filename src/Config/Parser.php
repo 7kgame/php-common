@@ -11,7 +11,10 @@ class Parser {
     $this->configDir = $configDir;
   }
 
-  public function getValue($type, $appName, $key=null) {
+  public function getValue($appName, $key=null, $type=null) {
+    if (empty($type)) {
+      $type = '';
+    }
     if (!isset($this->configs[$type][$appName])) {
       $conf = require($this->configDir . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $appName . '.php');
       $this->configs[$type][$appName] = $conf;
