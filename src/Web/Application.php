@@ -4,6 +4,7 @@ namespace QKPHP\Common\Web;
 use \QKPHP\Common\Web\Request\Request;
 use \QKPHP\Common\Web\Request\Router;
 use \QKPHP\Common\Utils\Url;
+use \QKPHP\Common\Config\Config;
 
 class Application {
 
@@ -24,6 +25,7 @@ class Application {
         $this->supportCORS(isset($options['hosts']) ? $options['hosts'] : null);
       }
     }
+    Config::setConfigDir($this->getConfigPath());
   }
 
   public function init () {
@@ -81,7 +83,7 @@ class Application {
     return $this->webroot . DIRECTORY_SEPARATOR . $this->controllerDir;
   }
 
-  public function getConfigDir () {
+  public function getConfigPath () {
     return $this->webroot . DIRECTORY_SEPARATOR . $this->configDir;
   }
 
