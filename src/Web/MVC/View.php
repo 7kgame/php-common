@@ -1,6 +1,6 @@
 <?php
 
-namespace QKPHP\Common\WWW;
+namespace QKPHP\Common\Web\MVC;
 
 class View {
 

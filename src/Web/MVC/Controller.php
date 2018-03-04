@@ -1,8 +1,8 @@
 <?php
 
-namespace QKPHP\Common\WWW;
+namespace QKPHP\Common\Web\MVC;
 
-abstract class Controller {
+abstract class Controller extends \QKPHP\Common\Web\Object {
 
   //Section init
   protected $annotation = array();
@@ -65,36 +65,6 @@ abstract class Controller {
   protected function show($templateFile) {
     $this->initTemplate();
     $this->template->show($templateFile);
-  }
-
-  //Section service container
-  private $serviceContainer = array();
-
-  protected function registerService($serviceName, $servicePath) {
-    if(isset($this->serviceContainer[$serviceName])) {
-      return;
-    }
-    $this->serviceContainer[$serviceName] = $servicePath;
-  }
-
-  public function __get($serviceName) {
-    if(isset($this->$serviceName)) {
-      return $this->$serviceName;
-    }
-    if(!isset($this->serviceContainer[$serviceName]) || empty($this->serviceContainer[$serviceName])) {
-      return null;
-    }
-
-    $type = gettype($this->serviceContainer[$serviceName]);
-    if($type == "object") {
-      return $this->serviceContainer[$serviceName];
-    } else if($type == "string") {
-      $service = $this->serviceContainer[$serviceName];
-      $this->serviceContainer[$serviceName] = new $service;
-      return $this->serviceContainer[$serviceName];
-    } else {
-      return null;
-    }
   }
 
   //Section transacation

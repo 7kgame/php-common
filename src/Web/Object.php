@@ -1,10 +1,7 @@
 <?php
+namespace QKPHP\Common\Web;
 
-namespace QKPHP\Common\WWW;
-
-abstract class Task {
-
-  abstract public function process($params=array());
+abstract class Object {
 
   private $objectContainer = array();
 
@@ -20,7 +17,7 @@ abstract class Task {
       return null;
     }
 
-    $type = gettype($this->objectContainer[$fieldName]); 
+    $type = gettype($this->objectContainer[$fieldName]);
     if($type == "object") {
       return $this->objectContainer[$fieldName];
     } else if($type == "string") {
@@ -31,5 +28,4 @@ abstract class Task {
       return null;
     }
   }
-
 }
