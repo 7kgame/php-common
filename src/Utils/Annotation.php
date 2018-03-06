@@ -3,7 +3,7 @@ namespace QKPHP\Common\Utils;
 
 class Annotation {
 
-  public static function parse($className) {
+  public static function parse($className, $classFile=null) {
     $cref = new \ReflectionClass($className);
     $classInfo = array(
       'class'=>self::parseComment($cref->getDocComment()),
@@ -11,13 +11,16 @@ class Annotation {
 
     $methods = $cref->getMethods();
     foreach($methods as $method) {
+      if ($classFile && $method->getFileName() != $classFile) {
+        continue;
+      }
       $classInfo['methods'][$method->getName()]['anno'] = self::parseComment($method->getDocComment());
       $params = $method->getParameters();
       $paramsName = array();
       foreach($params as $param) {
         $paramsName[] = $param->getName();
       }
-      $classInfo['methods'][$method->getName()]['params'] = array($paramsName, count($paramsName));
+      $classInfo['methods'][$method->getName()]['method'] = array($method->isPublic(), $paramsName, count($paramsName));
     }
     return $classInfo;
   }

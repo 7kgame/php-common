@@ -26,14 +26,28 @@ class Utils {
         if ($file == '.' || $file == '..') {
           continue;
         }
-        if (is_dir($file)) {
-          $files = array_merge($files, rdir($dir . DIRECTORY_SEPARATOR . $file));
+        $fileDir = $dir . DIRECTORY_SEPARATOR . $file;
+        if (is_dir($fileDir)) {
+          $files = array_merge($files, self::rdir($fileDir));
         } else {
-          $files[] = $dir . DIRECTORY_SEPARATOR . $file;
+          $files[] = $fileDir;
         }
       }
     }
     return $files;
+  }
+
+  public static function delDir ($dir, $withCurrentDir=true) {
+    $files = array_diff(scandir($dir), array('.', '..'));
+    foreach ($files as $file) {
+      $file0 = $dir .DIRECTORY_SEPARATOR . $file;
+      (is_dir($file0)) ? self::delDir ($file0, true) : unlink($file0);
+    }
+    if ($withCurrentDir) {
+      return rmdir($dir);
+    } else {
+      return true;
+    }
   }
 
 }
