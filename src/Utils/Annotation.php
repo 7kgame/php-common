@@ -32,7 +32,7 @@ class Annotation {
       $startPos = strpos($comment, '@');
       $comment = mb_substr($comment, $startPos);
       $comment = explode("@", $comment);
-      $comment0 = [];
+      $comment0 = array();
       foreach($comment as $c) {
         $c = self::_parseComment($c);
         if (!empty($c)) {
@@ -50,7 +50,7 @@ class Annotation {
     $pos0 = strpos($comment, '(');
     $pos1 = strrpos($comment, ')');
     if ($pos0 === false && $pos1 === false) {
-      return [$comment, null];
+      return array($comment, null);
     }
     if (($pos0 === false && $pos1 !== false) || ($pos0 !== false && $pos1 === false) || ($pos0 > $pos1)) {
       return null;
@@ -58,35 +58,35 @@ class Annotation {
     $name = trim(substr($comment, 0, $pos0));
     list($status, $comment) = self::parseSimpleValue(trim(substr($comment, $pos0+1, $pos1-$pos0-1)));
     if ($status) {
-      return [$name, $comment];
+      return array($name, $comment);
     }
-    return [$name, self::parseValue($comment)];
+    return array($name, self::parseValue($comment));
   }
 
   private static function parseSimpleValue($comment, $execStr=false) {
     if (is_numeric($comment)) {
-      return [true, $comment - 0];
+      return array(true, $comment - 0);
     }
     if ($comment === "false" || $comment === "true") {
-      return [true, boolval($comment)];
+      return array(true, boolval($comment));
     }
     if ($comment === 'null') {
-      return [true, null];
+      return array(true, null);
     }
     $cs = substr($comment, 0, 1);
     $ce = substr($comment, -1, 1);
     if ($execStr) {
       $newfunc = create_function('', 'return '.$comment.";");
       $comment = $newfunc();
-      return [true, $comment];
+      return array(true, $comment);
     }
-    return [false, $comment];
+    return array(false, $comment);
   }
 
   private static function parseValue($comment) {
-    $pairs = ['default'=> []];
-    $name = [];
-    $value = [];
+    $pairs = array('default'=> array());
+    $name = array();
+    $value = array();
     $startQuotation = '';
     $stage = 0;
     for ($i=0; $i<mb_strlen($comment); $i++) {
@@ -104,7 +104,7 @@ class Annotation {
         if ($stage == 0) {
           // name stop
           $startQuotation = '';
-          $value = [];
+          $value = array();
           $stage = 1;
         }
       } else if ($char == '"' || $char == "'") {
@@ -121,8 +121,8 @@ class Annotation {
             } else if (!empty($value)) {
               $pairs['default'][] = implode('', $value);
             }
-            $name = [];
-            $value = [];
+            $name = array();
+            $value = array();
             $stage = 0;
             $startQuotation = '';
           } else {
@@ -132,7 +132,7 @@ class Annotation {
           }
         } else {
           $startQuotation = $char;
-          $name = []; // 忽略name
+          $name = array(); // 忽略name
           $stage = 1;
         }
       } else if ($char == ',') {
@@ -146,8 +146,8 @@ class Annotation {
           } else if (!empty($value)) {
             $pairs['default'][] = implode('', $value);
           }
-          $name = [];
-          $value = [];
+          $name = array();
+          $value = array();
           $startQuotation = '';
         }
       } else {
