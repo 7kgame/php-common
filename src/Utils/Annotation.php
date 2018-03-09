@@ -76,9 +76,10 @@ class Annotation {
     $cs = substr($comment, 0, 1);
     $ce = substr($comment, -1, 1);
     if ($execStr) {
-      $newfunc = create_function('', 'return '.$comment.";");
-      $comment = $newfunc();
-      return array(true, $comment);
+      $newfunc = function ($comment) {
+        return eval('return '.$comment.';');
+      };
+      return array(true, $newfunc($comment));
     }
     return array(false, $comment);
   }
