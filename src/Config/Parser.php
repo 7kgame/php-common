@@ -22,9 +22,6 @@ class Parser {
     if (empty($key)) {
       return $this->configs[$type][$appName];
     }
-    if (!isset($type, $appName, $key)) {
-      return null;
-    }
     return $this->configs[$type][$appName][$key];
   }
 

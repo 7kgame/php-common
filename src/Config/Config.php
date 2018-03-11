@@ -14,15 +14,15 @@ class Config {
   }
 
   public static function getAppConf($appName, $key=null) {
-    return self::getParser()->getValue($appName, $key, 'app');
+    return self::getConf($appName, $key, 'app');
   }
 
-  public static function getDBConf($appName, $key="mysql") {
-    return self::getParser()->getValue($appName, $key, 'db');
+  public static function getDBConf($appName, $key=null) {
+    return self::getConf($appName, $key, 'db');
   }
 
   public static function getServiceConf($appName, $key=null) {
-    return self::getParser()->getValue($appName, $key, 'service');
+    return self::getConf($appName, $key, 'service');
   }
 
   public static function getConf($appName, $key=null, $type=null) {
