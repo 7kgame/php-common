@@ -6,8 +6,8 @@ use \QKPHP\Common\Config\Parser;
 
 class Config {
 
-  private static $parser;
   private static $configDir;
+  private static $configs = array();
 
   public static function setConfigDir ($configDir) {
     self::$configDir = $configDir;
@@ -26,14 +26,20 @@ class Config {
   }
 
   public static function getConf($appName, $key=null, $type=null) {
-    return self::getParser()->getValue($appName, $key, $type);
-  }
-
-  private static function getParser() {
-    if (empty(self::$parser)) {
-      self::$parser = new Parser(self::$configDir); 
+    if (empty(self::$configDir)) {
+      return null;
     }
-    return self::$parser;
+    if (empty($type)) {
+      $type = '';
+    }
+    if (!isset(self::$configs[$type][$appName])) {
+      $conf = require(self::$configDir . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $appName . '.php');
+      self::$configs[$type][$appName] = $conf;
+    }
+    if (empty($key)) {
+      return self::$configs[$type][$appName];
+    }
+    return self::$configs[$type][$appName][$key];
   }
 
 }
