@@ -89,93 +89,93 @@ namespace QKPHP\Common\Utils;
 
 class Http {
 
-    private static $timeout = 30;
+  private static $timeout = 30;
 
-    private static function curlReturn($errorCode, $content) {
-        return array($errorCode, $content);
-    }
+  private static function curlReturn($errorCode, $content) {
+    return array($errorCode, $content);
+  }
 
-    private static function setOption($ch, array $options=null) {
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        if($options === null) {
-            $options = array();
-        }
-        if(isset($options["cookie"]) && is_array($options["cookie"])) {
-            $cookieArr = array();
-            foreach($options["cookie"] as $key=>$value) {
-                $cookieArr[] = "$key=$value";
-            }
-            $cookie = implode("; ", $cookieArr);
-            curl_setopt($ch, CURLOPT_COOKIE, $cookie);
-        }
-        $timeout = self::$timeout;
-        if(isset($options["timeout"])) {
-            $timeout = $options["timeout"];
-        }
-        if($timeout < self::$timeout) {
-            $timeout = self::$timeout;
-        }
-        if(isset($options["ua"])) {
-            curl_setopt($ch, CURLOPT_USERAGENT, $options["ua"]);
-        }
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        if(isset($options['header'])) {
-            curl_setopt($ch, CURLOPT_HEADER, true);
-            $header = array();
-            foreach($options['header'] as $k=>$v) {
-                $header[] = $k.": ".$v;
-            }
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
+  private static function setOption($ch, array $options=null) {
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    if($options === null) {
+      $options = array();
     }
+    if(isset($options["cookie"]) && is_array($options["cookie"])) {
+      $cookieArr = array();
+      foreach($options["cookie"] as $key=>$value) {
+        $cookieArr[] = "$key=$value";
+      }
+      $cookie = implode("; ", $cookieArr);
+      curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+    }
+    $timeout = self::$timeout;
+    if(isset($options["timeout"])) {
+      $timeout = $options["timeout"];
+    }
+    if($timeout < self::$timeout) {
+      $timeout = self::$timeout;
+    }
+    if(isset($options["ua"])) {
+      curl_setopt($ch, CURLOPT_USERAGENT, $options["ua"]);
+    }
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    if(isset($options['header'])) {
+      curl_setopt($ch, CURLOPT_HEADER, true);
+      $header = array();
+      foreach($options['header'] as $k=>$v) {
+        $header[] = $k.": ".$v;
+      }
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    }
+  }
 
-    public static function get($url, $params, array $options=null) {
-        if(!empty($params)) {
-            $p1 = array();
-            foreach($params as $k=>$v) {
-                $p1[] = $k."=".urlencode($v);
-            }
-            $url .= "?".implode("&", $p1);
-        }
-        $ch = curl_init($url);
-        if(empty($options)) {
-            $options = array();
-        }
-        self::setOption($ch, $options);
-        $content = curl_exec($ch);
-        $errorCode = curl_errno($ch);
-        curl_close($ch);
-        return self::curlReturn($errorCode, $content);
+  public static function get($url, $params, array $options=null) {
+    if(!empty($params)) {
+      $p1 = array();
+      foreach($params as $k=>$v) {
+        $p1[] = $k."=".urlencode($v);
+      }
+      $url .= "?".implode("&", $p1);
     }
+    $ch = curl_init($url);
+    if(empty($options)) {
+      $options = array();
+    }
+    self::setOption($ch, $options);
+    $content = curl_exec($ch);
+    $errorCode = curl_errno($ch);
+    curl_close($ch);
+    return self::curlReturn($errorCode, $content);
+  }
 
-    /**
-     * @param $url 请求的链接
-     * @param $params 参数，可以是字符串也可以是数组array('a'=>1,'b'=>2);
-     * @param array $options 设置信息
-     * @return array
-     */
-    public static function post($url, $params, array $options=null) {
-        $ch = curl_init();
-        self::setOption($ch, $options);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, !empty($params));
-        $params = is_array($params) ? http_build_query($params) : $params;
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        $content = curl_exec($ch);
-        $errorCode = curl_errno($ch);
-        curl_close($ch);
-        return self::curlReturn($errorCode, $content);
-    }
+  /**
+   * @param $url 请求的链接
+   * @param $params 参数，可以是字符串也可以是数组array('a'=>1,'b'=>2);
+   * @param array $options 设置信息
+   * @return array
+   */
+  public static function post($url, $params, array $options=null) {
+    $ch = curl_init();
+    self::setOption($ch, $options);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, !empty($params));
+    $params = is_array($params) ? http_build_query($params) : $params;
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    $content = curl_exec($ch);
+    $errorCode = curl_errno($ch);
+    curl_close($ch);
+    return self::curlReturn($errorCode, $content);
+  }
 
-    public static function getUserIp() {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER["REMOTE_ADDR"];
-        }
-        return $ip;
+  public static function getUserIp() {
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+      $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+      $ip = $_SERVER["REMOTE_ADDR"];
     }
+    return $ip;
+  }
 
 }
