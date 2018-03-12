@@ -6,7 +6,7 @@ use \QKPHP\Common\Config\Parser;
 
 class Config {
 
-  private static $configDir;
+  public static $configDir;
   private static $configs = array();
 
   public static function setConfigDir ($configDir) {
