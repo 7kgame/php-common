@@ -166,7 +166,7 @@ class Url {
     return ($ip ? $ip : $_SERVER['REMOTE_ADDR']);
   }
 
-  public static function appendQuerysTo ($url, array $querys) {
+  public static function appendQuerysTo ($url, array $querys, array $hash=null) {
     if (empty($url)) {
       return $url;
     }
@@ -188,6 +188,14 @@ class Url {
     $path     = isset($urlInfo['path']) ? $urlInfo['path'] : '';
     $query    = isset($urlInfo['query']) ? '?' . $urlInfo['query'] : '';
     $fragment = isset($urlInfo['fragment']) ? '#' . $urlInfo['fragment'] : '';
+    if (!empty($hash)) {
+      $hash = http_build_query($hash);
+      if (empty($fragment)) {
+        $fragment = "#$hash";
+      } else {
+        $fragment .= "&$hash";
+      }
+    }
     return "$scheme$user$pass$host$port$path$query$fragment";
   } 
 
