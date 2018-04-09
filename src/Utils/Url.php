@@ -88,7 +88,7 @@ class Url {
       if(!$isNum) {
         return trim(htmlentities($value, ENT_QUOTES|ENT_IGNORE, 'UTF-8'));
       } else {
-        return trim($value) - 0;
+        return intval(trim($value));
       }
     } else {
       $ret = array();
