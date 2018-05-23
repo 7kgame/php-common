@@ -86,7 +86,7 @@ class Url {
   public static function processRequestValue($value, $isNum=false) {
     if(!is_array($value)) {
       if(!$isNum) {
-        return trim(htmlentities($value, ENT_QUOTES|ENT_IGNORE, 'UTF-8'));
+        return trim(htmlentities($value, ENT_NOQUOTES|ENT_IGNORE, 'UTF-8'));
       } else {
         return intval(trim($value));
       }
