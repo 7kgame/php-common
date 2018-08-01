@@ -129,6 +129,14 @@ class Http {
       }
       curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     }
+    if(isset($options['ca'])) {
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+      curl_setopt($ch,CURLOPT_SSLCERTTYPE,$options['ca']['cert_type']);
+      curl_setopt($ch,CURLOPT_SSLCERT, $options['ca']['cert_path']);
+      curl_setopt($ch,CURLOPT_SSLKEYTYPE,$options['ca']['key_type']);
+      curl_setopt($ch,CURLOPT_SSLKEY, $options['ca']['key_path']);
+    }
   }
 
   public static function get($url, $params, array $options=null) {
