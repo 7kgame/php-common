@@ -122,7 +122,7 @@ class Http {
     }
     curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
     if(isset($options['header'])) {
-      curl_setopt($ch, CURLOPT_HEADER, true);
+      curl_setopt($ch, CURLOPT_HEADER, false);
       $header = array();
       foreach($options['header'] as $k=>$v) {
         $header[] = $k.": ".$v;
