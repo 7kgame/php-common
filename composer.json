@@ -14,7 +14,7 @@
     "autoload": {
         "psr-4": {"QKPHP\\Common\\": "src"}
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "classmap": ["src/"],
     "require": {
       "php": ">=5.3.0"
