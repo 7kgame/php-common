@@ -1,14 +1,14 @@
 {
-    "name": "7k7k/php-common",
+    "name": "7kgame/php-common",
     "description": "php common lib",
-    "keywords": ["7k7k", "php", "common-lib"],
+    "keywords": ["7kgame", "php", "common-lib"],
     "homepage": "http://github.com/7kgame/php-common",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "chenyijun",
-            "email": "chenyijun@7k7k.com"
+            "email": "cyij2006@gmail.com"
         }
     ],
     "autoload": {
