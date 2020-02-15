@@ -28,7 +28,7 @@ class Annotation {
   private static function parseComment($comment) {
       $comment = trim($comment, '/**');
       $comment = trim($comment, '*/');
-      $comment = trim(preg_replace('/\*/', '', $comment));
+      //$comment = trim(preg_replace('/\*/', '', $comment));
       $startPos = strpos($comment, '@');
       $comment = mb_substr($comment, $startPos);
       $comment = explode("@", $comment);
